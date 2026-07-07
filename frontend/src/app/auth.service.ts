@@ -25,16 +25,31 @@ export class AuthService {
 
   authHeader(): Record<string, string> {
     const activeToken = this.token();
-    return activeToken ? { Authorization: `Bearer ${activeToken}` } : {};
+    return activeToken
+      ? { Authorization: `Bearer ${activeToken}` }
+      : {};
   }
 
-  async register(name: string, email: string, password: string): Promise<AuthResult> {
+  async register(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<AuthResult> {
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
+      const response = await fetch(
+        'https://smart-food-cycle.onrender.com/api/auth/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password
+          })
+        }
+      );
 
       const result = await response.json();
 
@@ -42,19 +57,35 @@ export class AuthService {
         this.startSession(result.token, result.user);
       }
 
-      return { success: result.success, message: result.message };
+      return {
+        success: result.success,
+        message: result.message
+      };
     } catch (error) {
-      return { success: false, message: 'Network error while creating your account.' };
+      console.error('Register Error:', error);
+
+      return {
+        success: false,
+        message: 'Network error while creating your account.'
+      };
     }
   }
 
   async login(email: string, password: string): Promise<AuthResult> {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
+      const response = await fetch(
+        'https://smart-food-cycle.onrender.com/api/auth/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        }
+      );
 
       const result = await response.json();
 
@@ -62,20 +93,34 @@ export class AuthService {
         this.startSession(result.token, result.user);
       }
 
-      return { success: result.success, message: result.message };
+      return {
+        success: result.success,
+        message: result.message
+      };
     } catch (error) {
-      return { success: false, message: 'Network error while signing in.' };
+      console.error('Login Error:', error);
+
+      return {
+        success: false,
+        message: 'Network error while signing in.'
+      };
     }
   }
 
   async logout(): Promise<void> {
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...this.authHeader() }
-      });
+      await fetch(
+        'https://smart-food-cycle.onrender.com/api/auth/logout',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...this.authHeader()
+          }
+        }
+      );
     } catch (error) {
-      // Logging out client-side is still safe even if the network call fails.
+      console.error('Logout Error:', error);
     } finally {
       this.endSession();
     }
@@ -84,6 +129,7 @@ export class AuthService {
   private startSession(token: string, user: AuthUser): void {
     this.token.set(token);
     this.currentUser.set(user);
+
     localStorage.setItem(TOKEN_STORAGE_KEY, token);
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
   }
@@ -91,6 +137,7 @@ export class AuthService {
   private endSession(): void {
     this.token.set(null);
     this.currentUser.set(null);
+
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     localStorage.removeItem(USER_STORAGE_KEY);
   }
