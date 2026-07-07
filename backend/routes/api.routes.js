@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { Donation, Beneficiary } = require('../models/Data');
 const { requireAuth } = require('../middleware/auth.middleware');
-
 // GET /api/metrics
 // Aggregates live dashboard statistics from the in-memory MongoDB collections.
 router.get('/metrics', async (req, res) => {
