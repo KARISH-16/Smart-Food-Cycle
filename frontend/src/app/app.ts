@@ -105,7 +105,7 @@ export class App implements OnInit {
     this.metricsError = '';
 
     try {
-      const response = await fetch('/api/metrics');
+      const response = await fetch('https://YOUR-BACKEND.onrender.com/api/metrics');
       const result = await response.json();
 
       if (result.success) {
@@ -127,7 +127,7 @@ export class App implements OnInit {
     this.aiPlanResult = null;
 
     try {
-      const response = await fetch('/api/ai-plan', {
+      const response = await fetch('https://YOUR-BACKEND.onrender.com/api/ai-plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -164,7 +164,7 @@ export class App implements OnInit {
     this.donationStatusIsError = false;
 
     try {
-      const response = await fetch('/api/donations', {
+      const response = await fetch('https://YOUR-BACKEND.onrender.com/api/donations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...this.auth.authHeader() },
         body: JSON.stringify({
@@ -205,7 +205,7 @@ export class App implements OnInit {
     this.beneficiaryStatusIsError = false;
 
     try {
-      const response = await fetch('/api/beneficiaries', {
+      const response = await fetch('https://YOUR-BACKEND.onrender.com/api/beneficiaries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...this.auth.authHeader() },
         body: JSON.stringify({
