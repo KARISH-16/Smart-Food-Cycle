@@ -1,0 +1,779 @@
+/* =====================================================
+   Layout shell
+   ===================================================== */
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+  padding-bottom: 80px;
+}
+
+section {
+  scroll-margin-top: 84px;
+}
+
+/* =====================================================
+   Header / nav
+   ===================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: var(--color-green);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 32px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--color-amber-tint);
+}
+
+.brand-mark {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-amber);
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.main-nav a {
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.main-nav a:hover {
+  color: var(--color-amber);
+}
+
+.auth-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-greeting {
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* =====================================================
+   Buttons
+   ===================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-amber {
+  background-color: var(--color-amber);
+  color: var(--color-green-dark);
+}
+
+.btn-amber:hover {
+  background-color: var(--color-amber-dark);
+  color: #ffffff;
+}
+
+.btn-amber:disabled {
+  background-color: #e8cfa3;
+  color: #8a754d;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-green);
+  border: 1px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-green);
+  background-color: var(--color-green-tint);
+}
+
+.btn-lg {
+  padding: 13px 28px;
+  font-size: 0.96rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* =====================================================
+   Hero
+   ===================================================== */
+
+.hero {
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 64px 32px 0;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-amber-dark);
+  margin-bottom: 14px;
+}
+
+.hero-copy h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2.9rem;
+  line-height: 1.12;
+  color: var(--color-ink);
+  margin-bottom: 20px;
+  max-width: 560px;
+}
+
+.hero-copy h1 em {
+  font-style: italic;
+  color: var(--color-green);
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-ink-soft);
+  max-width: 480px;
+  margin-bottom: 30px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero-ticket {
+  position: relative;
+  background-color: var(--color-surface-raised);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 36px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 16px 40px -20px rgba(33, 60, 38, 0.35);
+  animation: ticket-rise 0.6s ease-out;
+}
+
+.hero-ticket::before,
+.hero-ticket::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  background-color: var(--color-bg);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.hero-ticket::before {
+  left: -11px;
+}
+
+.hero-ticket::after {
+  right: -11px;
+}
+
+.ticket-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-soft);
+}
+
+.ticket-value {
+  font-family: var(--font-mono);
+  font-size: 3.4rem;
+  font-weight: 600;
+  color: var(--color-green);
+  line-height: 1;
+}
+
+.ticket-label {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+
+@keyframes ticket-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   How it works
+   ===================================================== */
+
+.how-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 32px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.section-heading.center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.section-heading h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.7rem;
+  color: var(--color-ink);
+}
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  list-style: none;
+}
+
+.how-step {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.how-number {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-amber-dark);
+  font-weight: 600;
+}
+
+.how-step h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-green);
+}
+
+.how-step p {
+  color: var(--color-ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* =====================================================
+   Ledger / ticket grid
+   ===================================================== */
+
+.ledger-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 32px;
+}
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.ticket-card {
+  position: relative;
+  background-color: var(--color-surface-raised);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(33, 60, 38, 0.06);
+  animation: ticket-fade 0.5s ease-out both;
+}
+
+.ticket-card::before,
+.ticket-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background-color: var(--color-bg);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-card::before {
+  left: -8px;
+}
+
+.ticket-card::after {
+  right: -8px;
+}
+
+.ticket-grid .ticket-card:nth-child(1) { animation-delay: 0s; }
+.ticket-grid .ticket-card:nth-child(2) { animation-delay: 0.05s; }
+.ticket-grid .ticket-card:nth-child(3) { animation-delay: 0.1s; }
+.ticket-grid .ticket-card:nth-child(4) { animation-delay: 0.15s; }
+.ticket-grid .ticket-card:nth-child(5) { animation-delay: 0.2s; }
+
+@keyframes ticket-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ticket-card-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+}
+
+.ticket-card-value {
+  font-family: var(--font-mono);
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--color-green);
+}
+
+/* =====================================================
+   Split panels (planner / donate / beneficiaries)
+   ===================================================== */
+
+.split-panel {
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.panel-card {
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.panel-card h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.panel-intro {
+  font-size: 0.88rem;
+  color: var(--color-ink-soft);
+  margin-bottom: 18px;
+}
+
+.output-card {
+  background-color: var(--color-green-tint);
+  border-color: #cfdcc6;
+}
+
+/* =====================================================
+   Forms
+   ===================================================== */
+
+.stacked-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.stacked-form label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-top: 10px;
+}
+
+.stacked-form input,
+.stacked-form select {
+  padding: 11px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.94rem;
+  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.stacked-form input:focus,
+.stacked-form select:focus {
+  border-color: var(--color-green);
+}
+
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+/* =====================================================
+   Plan output
+   ===================================================== */
+
+.plan-output {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.plan-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #d7e3cd;
+  font-size: 0.92rem;
+}
+
+.plan-row strong {
+  font-family: var(--font-mono);
+}
+
+.budget-tip {
+  margin-top: 12px;
+  font-size: 0.88rem;
+  color: var(--color-green-dark);
+  background-color: var(--color-surface-raised);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.menu-list {
+  margin-top: 8px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+/* =====================================================
+   Locked state (auth gate)
+   ===================================================== */
+
+.locked-state {
+  margin-top: 14px;
+  padding: 22px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.locked-state p {
+  color: var(--color-ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   Status text
+   ===================================================== */
+
+.status-text {
+  font-size: 0.86rem;
+  color: var(--color-ink-soft);
+  margin-top: 10px;
+}
+
+.error-text {
+  color: var(--color-error);
+}
+
+.success-text {
+  color: var(--color-green);
+  font-weight: 600;
+}
+
+/* =====================================================
+   Footer
+   ===================================================== */
+
+.site-footer {
+  background-color: var(--color-green-dark);
+  color: #d8e8df;
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 32px;
+  font-size: 0.84rem;
+}
+
+.footer-inner .brand-mark {
+  color: var(--color-amber);
+}
+
+/* =====================================================
+   Auth modal
+   ===================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(20, 28, 18, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+  animation: backdrop-fade 0.15s ease-out;
+}
+
+@keyframes backdrop-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  position: relative;
+  background-color: var(--color-surface-raised);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 30px 60px -20px rgba(20, 28, 18, 0.4);
+  animation: modal-rise 0.2s ease-out;
+}
+
+@keyframes modal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: var(--color-ink);
+}
+
+.modal-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-tab {
+  background: none;
+  border: none;
+  padding: 8px 4px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-right: 16px;
+}
+
+.modal-tab.active {
+  color: var(--color-green);
+  border-bottom-color: var(--color-amber);
+}
+
+/* =====================================================
+   Responsive
+   ===================================================== */
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 40px;
+  }
+
+  .hero-copy h1 {
+    font-size: 2.3rem;
+    max-width: none;
+  }
+
+  .ticket-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .how-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 14px 20px;
+  }
+
+  .main-nav {
+    display: none;
+  }
+
+  .split-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .app-main {
+    gap: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero,
+  .how-section,
+  .ledger-section,
+  .split-panel {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .ticket-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-card {
+    padding: 20px;
+  }
+
+  .modal-card {
+    padding: 24px;
+  }
+
+  .auth-greeting {
+    display: none;
+  }
+}

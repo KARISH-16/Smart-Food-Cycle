@@ -1,0 +1,375 @@
+<div class="app-shell">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark">⟲</span>
+        <span class="brand-name">Smart Food Cycle</span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="#how-it-works">How it works</a>
+        <a href="#ledger">Live ledger</a>
+        <a href="#planner">AI planner</a>
+        <a href="#donate">Donate</a>
+      </nav>
+
+      <div class="auth-area">
+        @if (auth.isAuthenticated()) {
+          <span class="auth-greeting">Hi, {{ auth.currentUser()?.name }}</span>
+          <button type="button" class="btn btn-ghost" (click)="logout()">Sign out</button>
+        } @else {
+          <button type="button" class="btn btn-ghost" (click)="openAuthModal('login')">Sign in</button>
+          <button type="button" class="btn btn-amber" (click)="openAuthModal('signup')">Sign up</button>
+        }
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section id="top" class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Surplus food, routed in real time</span>
+        <h1>Every leftover tray <em>becomes</em> someone's next meal.</h1>
+        <p class="hero-sub">
+          Smart Food Cycle connects donors with surplus food to the people who need it most —
+          with an AI-assisted portion planner that adapts to weather, headcount, and budget
+          on the spot.
+        </p>
+        <div class="hero-actions">
+          @if (auth.isAuthenticated()) {
+            <a href="#donate" class="btn btn-amber btn-lg">Dispatch a donation</a>
+          } @else {
+            <button type="button" class="btn btn-amber btn-lg" (click)="openAuthModal('signup')">
+              Get started free
+            </button>
+          }
+          <a href="#how-it-works" class="btn btn-outline btn-lg">See how it works</a>
+        </div>
+      </div>
+
+      <div class="hero-ticket">
+        <span class="ticket-eyebrow">Today's tally</span>
+        <span class="ticket-value">{{ metrics?.estimatedMealsServed ?? 0 }}</span>
+        <span class="ticket-label">meals served from rescued food</span>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how-section">
+      <div class="section-heading center">
+        <span class="eyebrow">The cycle</span>
+        <h2>Three stops, one less wasted meal</h2>
+      </div>
+
+      <ol class="how-steps">
+        <li class="how-step">
+          <span class="how-number">01</span>
+          <h3>Donate</h3>
+          <p>Dispatch surplus food straight from your kitchen, event, or store, with pickup details attached.</p>
+        </li>
+        <li class="how-step">
+          <span class="how-number">02</span>
+          <h3>Plan</h3>
+          <p>The AI planner adjusts portions for weather and headcount, and suggests a matching menu.</p>
+        </li>
+        <li class="how-step">
+          <span class="how-number">03</span>
+          <h3>Distribute</h3>
+          <p>Beneficiaries are enrolled and matched against what's available, closing the loop.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="ledger" class="ledger-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Live ledger</span>
+          <h2>Impact, tallied as it happens</h2>
+        </div>
+        <button type="button" class="btn btn-outline" (click)="loadMetrics()">Refresh</button>
+      </div>
+
+      @if (isLoadingMetrics) {
+        <p class="status-text">Loading metrics&hellip;</p>
+      }
+
+      @if (metricsError) {
+        <p class="status-text error-text">{{ metricsError }}</p>
+      }
+
+      @if (metrics) {
+        <div class="ticket-grid">
+          <article class="ticket-card">
+            <span class="ticket-card-label">Total donations</span>
+            <span class="ticket-card-value">{{ metrics.totalDonations }}</span>
+          </article>
+
+          <article class="ticket-card">
+            <span class="ticket-card-label">Beneficiaries registered</span>
+            <span class="ticket-card-value">{{ metrics.totalBeneficiaries }}</span>
+          </article>
+
+          <article class="ticket-card">
+            <span class="ticket-card-label">Food collected (kg)</span>
+            <span class="ticket-card-value">{{ metrics.totalFoodQuantity }}</span>
+          </article>
+
+          <article class="ticket-card">
+            <span class="ticket-card-label">Meals served</span>
+            <span class="ticket-card-value">{{ metrics.estimatedMealsServed }}</span>
+          </article>
+
+          <article class="ticket-card">
+            <span class="ticket-card-label">Waste reduced (kg)</span>
+            <span class="ticket-card-value">{{ metrics.estimatedWasteReducedKg }}</span>
+          </article>
+        </div>
+      }
+    </section>
+
+    <section id="planner" class="split-panel">
+      <div class="panel-card">
+        <span class="eyebrow">Step two</span>
+        <h2>AI portion manager</h2>
+        <p class="panel-intro">Tell us what's left over and who it's feeding — we'll adjust for the weather and the budget.</p>
+
+        <form class="stacked-form" (ngSubmit)="submitAiPlan()">
+          <label for="leftoverFood">Leftover food (kg)</label>
+          <input
+            id="leftoverFood"
+            type="number"
+            name="leftoverFood"
+            [(ngModel)]="aiForm.leftoverFood"
+            min="0"
+            required
+          />
+
+          <label for="peopleCount">People count</label>
+          <input
+            id="peopleCount"
+            type="number"
+            name="peopleCount"
+            [(ngModel)]="aiForm.peopleCount"
+            min="1"
+            required
+          />
+
+          <label for="weather">Weather condition</label>
+          <select id="weather" name="weather" [(ngModel)]="aiForm.weather">
+            <option value="mild">Mild</option>
+            <option value="hot">Hot</option>
+            <option value="cold">Cold</option>
+            <option value="rainy">Rainy</option>
+          </select>
+
+          <label for="budget">Available budget</label>
+          <input
+            id="budget"
+            type="number"
+            name="budget"
+            [(ngModel)]="aiForm.budget"
+            min="0"
+            required
+          />
+
+          <div class="action-row">
+            <button type="submit" class="btn btn-amber" [disabled]="isLoadingAiPlan">
+              {{ isLoadingAiPlan ? 'Calculating…' : 'Generate plan' }}
+            </button>
+          </div>
+        </form>
+
+        @if (aiPlanError) {
+          <p class="status-text error-text">{{ aiPlanError }}</p>
+        }
+      </div>
+
+      <div class="panel-card output-card">
+        <span class="eyebrow">Preview</span>
+        <h2>Plan preview</h2>
+
+        @if (!aiPlanResult) {
+          <p class="status-text">Fill in the portion manager to preview an optimized plan.</p>
+        }
+
+        @if (aiPlanResult) {
+          <div class="plan-output">
+            <div class="plan-row">
+              <span>Adjusted portion per person</span>
+              <strong>{{ aiPlanResult.adjustedPortionPerPerson }} kg</strong>
+            </div>
+            <div class="plan-row">
+              <span>Total adjusted portions</span>
+              <strong>{{ aiPlanResult.totalAdjustedPortions }} kg</strong>
+            </div>
+            <div class="plan-row">
+              <span>Surplus / deficit</span>
+              <strong>{{ aiPlanResult.surplusOrDeficit }} kg</strong>
+            </div>
+            <div class="plan-row">
+              <span>Budget per person</span>
+              <strong>{{ aiPlanResult.budgetPerPerson }}</strong>
+            </div>
+
+            <p class="budget-tip">{{ aiPlanResult.budgetTip }}</p>
+
+            <h3>Suggested menu alternatives</h3>
+            <ul class="menu-list">
+              @for (item of aiPlanResult.menuAlternatives; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section id="donate" class="split-panel">
+      <div class="panel-card">
+        <span class="eyebrow">Step one</span>
+        <h2>Donation logistics dispatcher</h2>
+
+        @if (!auth.isAuthenticated()) {
+          <div class="locked-state">
+            <p>Sign in to dispatch a donation — it only takes a moment, and it lets you track what you've given on the ledger.</p>
+            <button type="button" class="btn btn-amber" (click)="openAuthModal('login')">Sign in to continue</button>
+          </div>
+        } @else {
+          <form class="stacked-form" (ngSubmit)="submitDonation()">
+            <label for="donorName">Donor name</label>
+            <input id="donorName" type="text" name="donorName" [(ngModel)]="donationForm.donorName" required />
+
+            <label for="location">Pickup location</label>
+            <input id="location" type="text" name="location" [(ngModel)]="donationForm.location" required />
+
+            <label for="foodType">Food type</label>
+            <input id="foodType" type="text" name="foodType" [(ngModel)]="donationForm.foodType" required />
+
+            <label for="quantity">Quantity (kg)</label>
+            <input
+              id="quantity"
+              type="number"
+              name="quantity"
+              [(ngModel)]="donationForm.quantity"
+              min="0"
+              required
+            />
+
+            <div class="action-row">
+              <button type="submit" class="btn btn-amber" [disabled]="isSubmittingDonation">
+                {{ isSubmittingDonation ? 'Dispatching…' : 'Dispatch donation' }}
+              </button>
+            </div>
+          </form>
+
+          @if (donationStatusMessage) {
+            <p class="status-text" [class.error-text]="donationStatusIsError" [class.success-text]="!donationStatusIsError">
+              {{ donationStatusMessage }}
+            </p>
+          }
+        }
+      </div>
+
+      <div class="panel-card" id="beneficiaries">
+        <span class="eyebrow">Step three</span>
+        <h2>Beneficiary enrollment console</h2>
+
+        @if (!auth.isAuthenticated()) {
+          <div class="locked-state">
+            <p>Sign in to enroll a beneficiary and keep their record tied to your account.</p>
+            <button type="button" class="btn btn-amber" (click)="openAuthModal('login')">Sign in to continue</button>
+          </div>
+        } @else {
+          <form class="stacked-form" (ngSubmit)="submitBeneficiary()">
+            <label for="beneficiaryName">Beneficiary name</label>
+            <input
+              id="beneficiaryName"
+              type="text"
+              name="beneficiaryName"
+              [(ngModel)]="beneficiaryForm.beneficiaryName"
+              required
+            />
+
+            <label for="needType">Need type</label>
+            <input id="needType" type="text" name="needType" [(ngModel)]="beneficiaryForm.needType" required />
+
+            <div class="action-row">
+              <button type="submit" class="btn btn-amber" [disabled]="isSubmittingBeneficiary">
+                {{ isSubmittingBeneficiary ? 'Enrolling…' : 'Enroll beneficiary' }}
+              </button>
+            </div>
+          </form>
+
+          @if (beneficiaryStatusMessage) {
+            <p class="status-text" [class.error-text]="beneficiaryStatusIsError" [class.success-text]="!beneficiaryStatusIsError">
+              {{ beneficiaryStatusMessage }}
+            </p>
+          }
+        }
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="brand-mark">⟲</span>
+      <p>Smart Food Cycle — connecting surplus food with communities in need.</p>
+    </div>
+  </footer>
+
+  @if (isAuthModalOpen) {
+    <div class="modal-backdrop" (click)="closeAuthModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <button type="button" class="modal-close" (click)="closeAuthModal()" aria-label="Close dialog">×</button>
+
+        <div class="modal-tabs">
+          <button
+            type="button"
+            class="modal-tab"
+            [class.active]="authMode === 'login'"
+            (click)="switchAuthMode('login')"
+          >
+            Sign in
+          </button>
+          <button
+            type="button"
+            class="modal-tab"
+            [class.active]="authMode === 'signup'"
+            (click)="switchAuthMode('signup')"
+          >
+            Sign up
+          </button>
+        </div>
+
+        <form class="stacked-form" (ngSubmit)="submitAuthForm()">
+          @if (authMode === 'signup') {
+            <label for="authName">Name</label>
+            <input id="authName" type="text" name="name" [(ngModel)]="authForm.name" required />
+          }
+
+          <label for="authEmail">Email</label>
+          <input id="authEmail" type="email" name="email" [(ngModel)]="authForm.email" required />
+
+          <label for="authPassword">Password</label>
+          <input
+            id="authPassword"
+            type="password"
+            name="password"
+            [(ngModel)]="authForm.password"
+            minlength="6"
+            required
+          />
+
+          @if (authError) {
+            <p class="status-text error-text">{{ authError }}</p>
+          }
+
+          <div class="action-row">
+            <button type="submit" class="btn btn-amber btn-block" [disabled]="isAuthSubmitting">
+              {{ isAuthSubmitting ? 'Please wait…' : (authMode === 'signup' ? 'Create account' : 'Sign in') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
